@@ -82,6 +82,7 @@ suite('AST Walker', function () {
         test('do-while statement');
         test('for statement');
         test('for-in statement');
+
         test('for-of statement', function () {
             this.walk('for (let test of subject) { true; }');
 
@@ -94,7 +95,13 @@ suite('AST Walker', function () {
             assert.strictEqual(statement.right.name, 'subject');
             assert.strictEqual(statement.body.type, 'BlockStatement');
         });
-        test('debugger statement');
+
+        test('debugger statement', function () {
+            this.walk('debugger');
+
+            var statement = this.callbacks.processNode.firstCall.args[0];
+            assert.strictEqual(statement.type, 'DebuggerStatement');
+        });
     });
 
 
