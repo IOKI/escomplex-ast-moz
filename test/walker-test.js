@@ -80,7 +80,38 @@ suite('AST Walker', function () {
         test('try statement');
         test('while statement');
         test('do-while statement');
-        test('for statement');
+
+        test('for statement', function () {
+            var statement;
+
+            this.walk('for (var i = 0;;) true;');
+            statement = this.callbacks.processNode.firstCall.args[0];
+            assert.strictEqual(statement.type, 'ForStatement');
+            assert.strictEqual(statement.init.type, 'VariableDeclaration');
+            assert.isNull(statement.test);
+            assert.isNull(statement.update);
+            assert.strictEqual(statement.body.type, 'ExpressionStatement');
+            this.callbacks.processNode.reset();
+
+            this.walk('for (var i = 0; i < 10; i++) true;');
+            statement = this.callbacks.processNode.getCall(0).args[0];
+            assert.strictEqual(statement.type, 'ForStatement');
+            assert.strictEqual(statement.init.type, 'VariableDeclaration');
+            assert.strictEqual(statement.test.type, 'BinaryExpression');
+            assert.strictEqual(statement.update.type, 'UpdateExpression');
+            assert.strictEqual(statement.body.type, 'ExpressionStatement');
+            this.callbacks.processNode.reset();
+
+            this.walk('for (var i = 0; i < 10; i++) { true; }');
+            statement = this.callbacks.processNode.getCall(0).args[0];
+            assert.strictEqual(statement.type, 'ForStatement');
+            assert.strictEqual(statement.init.type, 'VariableDeclaration');
+            assert.strictEqual(statement.test.type, 'BinaryExpression');
+            assert.strictEqual(statement.update.type, 'UpdateExpression');
+            assert.strictEqual(statement.body.type, 'BlockStatement');
+            this.callbacks.processNode.reset();
+        });
+
         test('for-in statement');
 
         test('for-of statement', function () {
