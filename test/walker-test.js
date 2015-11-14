@@ -267,7 +267,89 @@ suite('AST Walker', function () {
         test('sequence expression');
         test('unary expression');
         test('binary expression');
-        test('assignment expression');
+
+        suite('assignment expression', function () {
+            function testAssignmentExpression (expression, operator) {
+                assert.strictEqual(expression.type, 'AssignmentExpression');
+                assert.strictEqual(expression.operator, operator);
+                assert.strictEqual(expression.left.type, 'Identifier');
+                assert.strictEqual(expression.left.name, 'foo');
+                assert.strictEqual(expression.right.type, 'Literal');
+                assert.strictEqual(expression.right.value, 1);
+            }
+
+            test('equals assignment operator', function () {
+                this.walk('foo = 1');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testAssignmentExpression(expression, '=');
+            });
+
+            test('addition assignment operator', function () {
+                this.walk('foo += 1');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testAssignmentExpression(expression, '+=');
+            });
+
+            test('subtraction assignment operator', function () {
+                this.walk('foo -= 1');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testAssignmentExpression(expression, '-=');
+            });
+
+            test('multiplication assignment operator', function () {
+                this.walk('foo *= 1');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testAssignmentExpression(expression, '*=');
+            });
+
+            test('division assignment operator', function () {
+                this.walk('foo /= 1');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testAssignmentExpression(expression, '/=');
+            });
+
+            test('modulus assignment operator', function () {
+                this.walk('foo %= 1');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testAssignmentExpression(expression, '%=');
+            });
+
+            test('left shift assignment operator', function () {
+                this.walk('foo <<= 1');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testAssignmentExpression(expression, '<<=');
+            });
+
+            test('right shift assignment operator', function () {
+                this.walk('foo >>= 1');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testAssignmentExpression(expression, '>>=');
+            });
+
+            test('unsigned right shift assignment operator', function () {
+                this.walk('foo >>>= 1');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testAssignmentExpression(expression, '>>>=');
+            });
+
+            test('bitwise or assignment operator', function () {
+                this.walk('foo |= 1');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testAssignmentExpression(expression, '|=');
+            });
+
+            test('bitwise xor assignment operator', function () {
+                this.walk('foo ^=1');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testAssignmentExpression(expression, '^=');
+            });
+
+            test('bitwise and assignment operator', function () {
+                this.walk('foo &= 1');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testAssignmentExpression(expression, '&=');
+            });
+        });
 
         suite('update expression', function () {
             function testUpdateExpression (expression, operator, prefix) {
