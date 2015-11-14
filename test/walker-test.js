@@ -268,7 +268,41 @@ suite('AST Walker', function () {
         test('unary expression');
         test('binary expression');
         test('assignment expression');
-        test('update expression');
+
+        suite('update expression', function () {
+            function testUpdateExpression (expression, operator, prefix) {
+                assert.strictEqual(expression.type, 'UpdateExpression');
+                assert.strictEqual(expression.argument.name, 'foo');
+                assert.strictEqual(expression.operator, operator);
+                assert.strictEqual(expression.prefix, prefix);    
+            }
+
+            test('increment suffix', function () {
+                this.walk('foo++');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testUpdateExpression(expression, '++', false);
+            });
+
+            test('increment prefix', function () {
+                this.walk('++foo');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testUpdateExpression(expression, '++', true);
+            });
+
+            test('decrement suffix', function () {
+                this.walk('foo--');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testUpdateExpression(expression, '--', false);
+            });
+
+            test('decrement prefix', function () {
+                this.walk('--foo');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testUpdateExpression(expression, '--', true);
+            });
+        });
+
+        test('update expression -- ')
         test('logical expression');
         test('conditional expression');
         test('call expression');
