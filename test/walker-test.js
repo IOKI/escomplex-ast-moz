@@ -384,8 +384,29 @@ suite('AST Walker', function () {
             });
         });
 
-        test('update expression -- ')
-        test('logical expression');
+        suite('logical expression', function () {
+            function testLogicalExpression (expression, operator) {
+                assert.strictEqual(expression.type, 'LogicalExpression');
+                assert.strictEqual(expression.operator, operator);
+                assert.strictEqual(expression.left.type, 'Literal');
+                assert.strictEqual(expression.left.value, true);
+                assert.strictEqual(expression.right.type, 'Literal');
+                assert.strictEqual(expression.right.value, false);
+            }
+
+            test('and operator', function () {
+                this.walk('true && false');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testLogicalExpression(expression, '&&');
+            });
+
+            test('or operator', function () {
+                this.walk('true || false');
+                var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                testLogicalExpression(expression, '||');
+            });
+        });
+
         test('conditional expression');
         test('call expression');
         test('new expression');
