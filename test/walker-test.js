@@ -265,7 +265,28 @@ suite('AST Walker', function () {
         });
 
         test('sequence expression');
-        test('unary expression');
+
+        suite('unary expression', function () {
+            function testUnaryExpression (operator) {
+                test(operator, function () {
+                    this.walk(operator + ' a');
+                    var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                    assert.strictEqual(expression.type, 'UnaryExpression');
+                    assert.strictEqual(expression.operator, operator);
+                    assert.strictEqual(expression.prefix, true);
+                    assert.strictEqual(expression.argument.type, 'Identifier');
+                    assert.strictEqual(expression.argument.name, 'a');
+                });
+            }
+
+            testUnaryExpression('-');
+            testUnaryExpression('+');
+            testUnaryExpression('!');
+            testUnaryExpression('~');
+            testUnaryExpression('typeof');
+            testUnaryExpression('void');
+            testUnaryExpression('delete');
+        });
 
         suite('binary expression', function () {
             function testBinaryExpression (operator) {
