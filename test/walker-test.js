@@ -266,7 +266,43 @@ suite('AST Walker', function () {
 
         test('sequence expression');
         test('unary expression');
-        test('binary expression');
+
+        suite('binary expression', function () {
+            function testBinaryExpression (operator) {
+                test(operator, function () {
+                    this.walk('a ' + operator + ' b');
+                    var expression = this.callbacks.processNode.firstCall.args[0].expression;
+                    assert.strictEqual(expression.type, 'BinaryExpression');
+                    assert.strictEqual(expression.operator, operator);
+                    assert.strictEqual(expression.left.type , 'Identifier');
+                    assert.strictEqual(expression.left.name, 'a');
+                    assert.strictEqual(expression.right.type, 'Identifier');
+                    assert.strictEqual(expression.right.name, 'b');
+                });
+            }
+
+            testBinaryExpression('==');
+            testBinaryExpression('!=');
+            testBinaryExpression('===');
+            testBinaryExpression('!==');
+            testBinaryExpression('<');
+            testBinaryExpression('<=');
+            testBinaryExpression('>');
+            testBinaryExpression('>=');
+            testBinaryExpression('<<');
+            testBinaryExpression('>>');
+            testBinaryExpression('>>>');
+            testBinaryExpression('+');
+            testBinaryExpression('-');
+            testBinaryExpression('*');
+            testBinaryExpression('/');
+            testBinaryExpression('%');
+            testBinaryExpression('|');
+            testBinaryExpression('^');
+            testBinaryExpression('&');
+            testBinaryExpression('in');
+            testBinaryExpression('instanceof');
+        });
 
         suite('assignment expression', function () {
             function testAssignmentExpression (expression, operator) {
