@@ -77,7 +77,19 @@ suite('AST Walker', function () {
         test('switch statement');
         test('return statement');
         test('throw statement');
-        test('try statement');
+
+        test('try statement', function () {
+            var statement;
+
+            this.walk("try { void 0; } catch (e) { void 0; } finally { void 0; }");
+            statement = this.callbacks.processNode.firstCall.args[0];
+            console.log(statement);
+            assert.strictEqual(statement.type, 'TryStatement');
+            assert.strictEqual(statement.block.type, 'BlockStatement');
+            assert.strictEqual(statement.handler.type, 'CatchClause');
+            assert.strictEqual(statement.finalizer.type, 'BlockStatement');
+        });
+
         test('while statement');
         test('do-while statement');
 
