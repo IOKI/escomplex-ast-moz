@@ -503,7 +503,15 @@ suite('AST Walker', function () {
     suite('Miscellaneous', function () {
         test('identifier');
         test('literal');
-        test('regexp literal');
+
+        test('regexp literal', function () {
+            this.walk('/[a-z0-9]+/mig');
+            var expression = this.callbacks.processNode.firstCall.args[0].expression;
+            assert.strictEqual(expression.type, 'Literal');
+            assert.strictEqual(expression.regex.pattern, '[a-z0-9]+');
+            assert.strictEqual(expression.regex.flags, 'mig');
+        });
+
         test('unary operator');
         test('binary operator');
         test('logical operator');
