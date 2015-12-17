@@ -26,12 +26,12 @@
     "walker"
   ],
   "dependencies": {
-    "check-types": "~4",
-    "escomplex-traits": "0.2.x"
+    "check-types": "^5.1.0",
+    "escomplex-traits": "^0.3.0"
   },
   "devDependencies": {
     "chai": "^3.3.0",
-    "esprima": "2.6.x",
+    "esprima": "^2.7.1",
     "jshint": "2.8.x",
     "mocha": "2.3.x",
     "sinon": "^1.16.1"
