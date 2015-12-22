@@ -9,7 +9,7 @@ exports.get = get;
 function get () {
     return traits.actualise(
         function (node) {
-            return node.callee.type === 'FunctionExpression' ? 1 : 0;
+            return node.callee.type.match(/FunctionExpression/) ? 1 : 0;
         },
         0, '()', undefined, [ 'arguments', 'callee' ], undefined, undefined,
         function (node, clearAliases) {
